@@ -25,6 +25,10 @@ data-provenance pattern of `kunyuan/dfpt-lambda-benchmark`.
   `dfpt-lambda-benchmark` pattern to this Floquet benchmark.
 - `curation_protocol.md`: acceptance, rejection, difficulty-level, and scoring
   criteria for turning those references into runnable tasks.
+- `benchmark_manifest.csv`: machine-readable index of runnable tasks, source
+  papers, reference rows, hidden-gold type, and selfcheck commands.
+- `acceptance.md`: explicit source, coverage, scoring, and mechanical acceptance
+  criteria.
 
 - `L1-paper-formula-renormalization/`: the current runnable paper-derived task,
   built from the accepted L1 rows of `data/floquet_reference.csv`.

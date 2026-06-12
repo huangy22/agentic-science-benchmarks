@@ -9,10 +9,12 @@ ROOT = Path(__file__).resolve().parents[1]
 REFERENCE = ROOT / "data" / "floquet_reference.csv"
 SOURCE_MANIFEST = ROOT / "data" / "lkm_source_manifest.csv"
 ORIGINAL_CHECKS = ROOT / "data" / "original_paper_checks.csv"
+BENCHMARK_MANIFEST = ROOT / "benchmark_manifest.csv"
 RUNNABLE_L1 = ROOT / "L1-paper-formula-renormalization"
 RUNNABLE_L2 = ROOT / "L2-kicked-ssh-quasienergy"
 RUNNABLE_L3_CRITICAL = ROOT / "L3-graphene-antidot-critical-amplitudes"
 RUNNABLE_L3_WINDOWS = ROOT / "L3-graphene-antidot-photon-windows"
+PROTOTYPE = ROOT / "L1-driven-qubit-effective-hamiltonian"
 
 REQUIRED_COLUMNS = [
     "case_id",
@@ -61,6 +63,20 @@ ORIGINAL_CHECK_COLUMNS = [
     "notes",
 ]
 
+BENCHMARK_MANIFEST_COLUMNS = [
+    "task_id",
+    "level",
+    "status",
+    "paper_derived",
+    "task_path",
+    "reference_case_ids",
+    "paper_ids",
+    "hidden_gold_type",
+    "original_check_required",
+    "selfcheck_command",
+    "notes",
+]
+
 
 def fail(message: str) -> int:
     print(f"FAIL: {message}", file=sys.stderr)
@@ -85,6 +101,10 @@ def main() -> int:
         original_reader = csv.DictReader(f)
         original_rows = list(original_reader)
 
+    with BENCHMARK_MANIFEST.open(newline="") as f:
+        benchmark_manifest_reader = csv.DictReader(f)
+        benchmark_manifest_rows = list(benchmark_manifest_reader)
+
     if reader.fieldnames != REQUIRED_COLUMNS:
         return fail(
             "unexpected columns: "
@@ -101,6 +121,12 @@ def main() -> int:
         return fail(
             "unexpected original-check columns: "
             f"{original_reader.fieldnames!r}; expected {ORIGINAL_CHECK_COLUMNS!r}"
+        )
+    if benchmark_manifest_reader.fieldnames != BENCHMARK_MANIFEST_COLUMNS:
+        return fail(
+            "unexpected benchmark-manifest columns: "
+            f"{benchmark_manifest_reader.fieldnames!r}; "
+            f"expected {BENCHMARK_MANIFEST_COLUMNS!r}"
         )
 
     ids = [r["case_id"] for r in rows]
@@ -128,6 +154,53 @@ def main() -> int:
     original_by_case = {r["reference_case_id"]: r for r in original_rows}
     if len(original_by_case) != len(original_rows):
         return fail("original paper checks have duplicate reference_case_id values")
+
+    task_ids = [r["task_id"] for r in benchmark_manifest_rows]
+    task_dupes = [tid for tid, n in Counter(task_ids).items() if n > 1]
+    if task_dupes:
+        return fail(f"benchmark manifest has duplicate task_id values: {task_dupes}")
+    paper_derived_tasks = [
+        r
+        for r in benchmark_manifest_rows
+        if r["status"] == "runnable" and r["paper_derived"] == "yes"
+    ]
+    if len(paper_derived_tasks) < 4:
+        return fail("expected at least four runnable paper-derived tasks")
+    manifest_levels = Counter(r["level"] for r in paper_derived_tasks)
+    for level in ("L1", "L2", "L3"):
+        if manifest_levels[level] < 1:
+            return fail(f"benchmark manifest lacks runnable paper-derived {level} task")
+    manifest_papers: set[str] = set()
+    manifest_refs: set[str] = set()
+    for row in benchmark_manifest_rows:
+        task_path = ROOT / row["task_path"]
+        if not task_path.exists():
+            return fail(f"manifest task_path does not exist: {task_path}")
+        if not (task_path / "task.toml").exists():
+            return fail(f"manifest task lacks task.toml: {task_path}")
+        if not (task_path / "scripts" / "selfcheck.sh").exists():
+            return fail(f"manifest task lacks scripts/selfcheck.sh: {task_path}")
+        if row["paper_derived"] == "yes":
+            for ref_id in row["reference_case_ids"].split(";"):
+                ref = accepted_by_case.get(ref_id)
+                if ref is None:
+                    return fail(f"manifest references unknown accepted row {ref_id!r}")
+                if ref["level"] != row["level"]:
+                    return fail(
+                        f"manifest level mismatch for {row['task_id']} -> {ref_id}"
+                    )
+                manifest_refs.add(ref_id)
+            for paper_id in row["paper_ids"].split(";"):
+                if not paper_id.isdigit():
+                    return fail(f"manifest paper id is not numeric: {paper_id!r}")
+                manifest_papers.add(paper_id)
+            if row["level"] == "L3" and row["original_check_required"] != "yes":
+                return fail(f"manifest L3 task must require original check: {row['task_id']}")
+        else:
+            if row["task_path"] != PROTOTYPE.name:
+                return fail(f"only the prototype may be non-paper-derived: {row['task_id']}")
+    if len(manifest_papers) < 4:
+        return fail("paper-derived runnable manifest must cover at least four papers")
 
     for i, row in enumerate(rows, start=2):
         missing = [c for c in REQUIRED_COLUMNS if not row[c].strip()]
@@ -285,10 +358,16 @@ def main() -> int:
         return fail("runnable L3 task does not cover graphene critical amplitudes row")
     if "flq_l3_graphene_antidot_photon_windows" not in l3_runnable_refs:
         return fail("runnable L3 task does not cover graphene photon windows row")
+    required_manifest_refs = runnable_refs | l2_runnable_refs | l3_runnable_refs
+    if not required_manifest_refs.issubset(manifest_refs):
+        missing = sorted(required_manifest_refs - manifest_refs)
+        return fail(f"benchmark manifest missing runnable references: {missing}")
 
     print("PASS")
     print(f"rows={len(rows)} accepted={len(accepted)} papers={len(paper_ids)}")
     print(f"manifest_papers={len(manifest_rows)}")
+    print(f"runnable_paper_derived_tasks={len(paper_derived_tasks)}")
+    print(f"runnable_paper_derived_papers={len(manifest_papers)}")
     for level in ("L1", "L2", "L3"):
         print(f"accepted[{level}]={accepted_levels[level]}")
     return 0
