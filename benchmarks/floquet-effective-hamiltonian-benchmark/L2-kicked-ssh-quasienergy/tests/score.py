@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+import argparse
+import csv
+import math
+import sys
+
+
+TOL = 1e-7
+
+
+def read_table(path):
+    with open(path, newline="") as f:
+        rows = list(csv.DictReader(f))
+    out = {}
+    for row in rows:
+        cid = row.get("case_id", "").strip()
+        if not cid:
+            raise ValueError(f"{path}: row without case_id")
+        if cid in out:
+            raise ValueError(f"{path}: duplicate case_id {cid}")
+        out[cid] = row
+    return out
+
+
+def as_float(row, field, cid):
+    try:
+        val = float(row[field])
+    except Exception as exc:
+        raise ValueError(f"{cid}: invalid {field}") from exc
+    if not math.isfinite(val):
+        raise ValueError(f"{cid}: non-finite {field}")
+    return val
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--pred", required=True)
+    parser.add_argument("--gold", required=True)
+    args = parser.parse_args()
+
+    pred = read_table(args.pred)
+    gold = read_table(args.gold)
+
+    missing = sorted(set(gold) - set(pred))
+    extra = sorted(set(pred) - set(gold))
+    if missing or extra:
+        if missing:
+            print(f"missing cases: {missing}", file=sys.stderr)
+        if extra:
+            print(f"extra cases: {extra}", file=sys.stderr)
+        return 1
+
+    failures = []
+    max_err = 0.0
+    for cid in sorted(gold):
+        got = as_float(pred[cid], "epsilon", cid)
+        ref = as_float(gold[cid], "epsilon", cid)
+        err = abs(got - ref)
+        max_err = max(max_err, err)
+        if err > TOL:
+            failures.append((cid, got, ref, err))
+
+    if failures:
+        print("FAIL")
+        for cid, got, ref, err in failures:
+            print(
+                f"{cid} epsilon: got={got:.10g} ref={ref:.10g} "
+                f"abs_err={err:.3g} tol={TOL:.3g}"
+            )
+        return 1
+
+    print("PASS")
+    print(f"max_abs_err[epsilon]={max_err:.3g}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

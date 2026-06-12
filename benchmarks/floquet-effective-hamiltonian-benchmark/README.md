@@ -26,6 +26,8 @@ data-provenance pattern of `kunyuan/dfpt-lambda-benchmark`.
 
 - `L1-paper-formula-renormalization/`: the current runnable paper-derived task,
   built from the accepted L1 rows of `data/floquet_reference.csv`.
+- `L2-kicked-ssh-quasienergy/`: a runnable paper-derived L2 task built from the
+  accepted kicked extended SSH quasienergy row.
 - `L1-driven-qubit-effective-hamiltonian/`: retained only as a synthetic
   prototype for verifier mechanics. It is not the paper-derived benchmark.
 
@@ -67,6 +69,7 @@ gold observable, and a source LKM node or original-paper cross-check.
 
 ```bash
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L1-paper-formula-renormalization/scripts/selfcheck.sh
+bash benchmarks/floquet-effective-hamiltonian-benchmark/L2-kicked-ssh-quasienergy/scripts/selfcheck.sh
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L1-driven-qubit-effective-hamiltonian/scripts/selfcheck.sh
 python benchmarks/floquet-effective-hamiltonian-benchmark/scripts/validate_reference.py
 ```

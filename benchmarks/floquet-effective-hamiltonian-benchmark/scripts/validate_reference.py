@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REFERENCE = ROOT / "data" / "floquet_reference.csv"
 SOURCE_MANIFEST = ROOT / "data" / "lkm_source_manifest.csv"
 RUNNABLE_L1 = ROOT / "L1-paper-formula-renormalization"
+RUNNABLE_L2 = ROOT / "L2-kicked-ssh-quasienergy"
 
 REQUIRED_COLUMNS = [
     "case_id",
@@ -158,6 +159,28 @@ def main() -> int:
     if not accepted_l1_refs.issubset(runnable_refs):
         missing = sorted(accepted_l1_refs - runnable_refs)
         return fail(f"runnable L1 task does not cover accepted references: {missing}")
+
+    l2_runnable_refs: set[str] = set()
+    l2_case_files = [
+        RUNNABLE_L2 / "environment" / "packet" / "cases.csv",
+        RUNNABLE_L2 / "tests" / "hidden" / "cases.csv",
+    ]
+    for case_file in l2_case_files:
+        for row in load_csv(case_file):
+            ref_id = row["reference_case_id"]
+            l2_runnable_refs.add(ref_id)
+            ref = accepted_by_case.get(ref_id)
+            if ref is None:
+                return fail(f"{case_file}: unknown accepted reference {ref_id!r}")
+            if ref["level"] != "L2":
+                return fail(f"{case_file}: {ref_id!r} is not an L2 reference")
+            if row["paper_id"] != ref["paper_id"]:
+                return fail(
+                    f"{case_file}: paper_id mismatch for {row['case_id']} "
+                    f"({row['paper_id']} != {ref['paper_id']})"
+                )
+    if "flq_l2_kicked_ssh_quasienergy_formula" not in l2_runnable_refs:
+        return fail("runnable L2 task does not cover kicked SSH quasienergy row")
 
     print("PASS")
     print(f"rows={len(rows)} accepted={len(accepted)} papers={len(paper_ids)}")
