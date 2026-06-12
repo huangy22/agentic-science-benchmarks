@@ -240,6 +240,11 @@ def main() -> int:
                 )
             if original_check["paper_id"] != ref["paper_id"]:
                 return fail(f"{case_file}: original-check paper mismatch for {ref_id}")
+            if "papers/content/batch" not in original_check["original_source"]:
+                return fail(
+                    f"{case_file}: {ref_id!r} must use LKM papers/content/batch "
+                    "for promoted L3 hidden gold unless explicitly downgraded"
+                )
     l3_grid_case_files = [
         RUNNABLE_L3_WINDOWS / "environment" / "packet" / "cases.csv",
         RUNNABLE_L3_WINDOWS / "tests" / "hidden" / "cases.csv",
@@ -271,6 +276,11 @@ def main() -> int:
                 )
             if original_check["paper_id"] != ref["paper_id"]:
                 return fail(f"{case_file}: original-check paper mismatch for {ref_id}")
+            if "papers/content/batch" not in original_check["original_source"]:
+                return fail(
+                    f"{case_file}: {ref_id!r} must use LKM papers/content/batch "
+                    "for promoted L3 hidden gold unless explicitly downgraded"
+                )
     if "flq_l3_graphene_antidot_critical_amplitudes" not in l3_runnable_refs:
         return fail("runnable L3 task does not cover graphene critical amplitudes row")
     if "flq_l3_graphene_antidot_photon_windows" not in l3_runnable_refs:

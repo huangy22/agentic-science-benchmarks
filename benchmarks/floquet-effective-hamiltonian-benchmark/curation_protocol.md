@@ -17,6 +17,8 @@ can enter a scored hidden set.
    `POST https://open.bohrium.com/openapi/v1/lkm/reasoning/search`.
 5. Bohrium LKM batch paper-content endpoint for original-text checks:
    `POST https://open.bohrium.com/openapi/v1/lkm/papers/content/batch`.
+   Use payload `{"paper_ids": ["<paper_id>", "..."]}`; the response contains
+   per-paper `markdown_url` entries for source-text inspection.
 6. External original paper text, source files, or figures, used as fallback for
    cases marked `needs_original_paper` when the LKM content endpoint is
    unavailable or incomplete.

@@ -21,12 +21,14 @@ For original-text verification, prefer the Bohrium LKM batch content endpoint:
 
 ```text
 POST https://open.bohrium.com/openapi/v1/lkm/papers/content/batch
+payload: {"paper_ids": ["<paper_id>", "..."]}
 ```
 
-Use this endpoint to confirm figure/table intervals, parameter conventions, and
-display precision before a row is promoted into hidden scoring. External
-arXiv/PDF/source-file checks are acceptable fallbacks only when the LKM content
-endpoint is unavailable or incomplete; record the fallback explicitly in
+The response returns `data.items[]` with a `markdown_url` and image metadata.
+Use the markdown content to confirm figure/table intervals, parameter
+conventions, and display precision before a row is promoted into hidden scoring.
+External arXiv/PDF/source-file checks are acceptable fallbacks only when the LKM
+content endpoint is unavailable or incomplete; record the fallback explicitly in
 `original_paper_checks.csv`.
 
 ## Reference-Repo Pattern
