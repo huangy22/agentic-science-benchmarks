@@ -1,0 +1,17 @@
+version = "1.0"
+
+[metadata]
+author_name = "Gaia workflow #1069 - paper-derived L3 graphene antidot critical amplitudes"
+author_email = "noreply@example.com"
+difficulty_explanation = "Given scan-like Floquet quasienergy-gap outputs for the Floquet graphene antidot lattice, recover the two critical drive amplitudes reported in the source paper. Gold is tied to flq_l3_graphene_antidot_critical_amplitudes and cross-checked against the arXiv source. This is a research-workflow recovery task, not a full nonperturbative reproduction of the original extended-space diagonalization."
+category = "scientific-computing"
+tags = ["physics", "floquet", "graphene-antidot", "critical-amplitude", "quasienergy-gap", "paper-derived", "workflow-1069", "level-3"]
+
+[verifier]
+timeout_sec = 120.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 600.0

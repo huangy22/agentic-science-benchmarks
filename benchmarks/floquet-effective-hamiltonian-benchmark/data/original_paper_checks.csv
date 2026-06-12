@@ -1,0 +1,2 @@
+reference_case_id,paper_id,doi,original_source,checked_fields,confirmed_values,check_status,notes
+flq_l3_graphene_antidot_critical_amplitudes,867767689039315299,10.48550/arXiv.2108.06472,arXiv:2108.06472 source FGALs.tex,scan range; scan step; critical amplitudes,E0 scan 0-6 a.u.; step 0.05 a.u.; E0c1=2.15 a.u.; E0c2=4.62 a.u.,confirmed,Source lines around amplitude scan and representative spectra caption agree with the LKM node.

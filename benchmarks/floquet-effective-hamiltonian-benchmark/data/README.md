@@ -13,6 +13,7 @@ benchmark tracks.
 | `workflow_1069_paper_ids.txt` | The 191 paper ids returned by workflow family `#1069`. |
 | `floquet_reference.csv` | Curated candidate/gold cases across L1, L2, and L3. This is the main reference table. |
 | `lkm_source_manifest.csv` | Paper-graph audit manifest for the LKM payloads inspected while building `floquet_reference.csv`. |
+| `original_paper_checks.csv` | Short original-paper verification ledger for rows promoted beyond LKM-only evidence. |
 
 ## Reference-Repo Pattern
 
@@ -35,6 +36,8 @@ This Floquet benchmark mirrors that shape, with smaller initial scope:
   research-workflow reproduction;
 - rows marked `needs_original_paper` are excluded from hidden scoring until an
   original-paper or figure/table check confirms the exact scoring target.
+- runnable L3 hidden gold must have a matching `confirmed` row in
+  `original_paper_checks.csv`.
 
 ## Current Source Boundary
 
