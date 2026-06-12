@@ -1,6 +1,6 @@
 paper_id,title,doi,lkm_graph_status,node_count,edge_count,addressed_problem_count,open_question_count,reference_source_nodes,reference_statuses,raw_payload_location
 1012539050080337941,Theory of symmetry-resolved quench-drive spectroscopy: Nonlinear response of phase-fluctuating superconductors,10.1103/physrevb.109.214515,ok,32,31,1,1,not_selected,screened_not_selected,external_tmp_not_committed
-1121428643831087110,Converting $PT$-Symmetric Topological Classes by Floquet Engineering,10.48550/arxiv.2504.14846,ok,31,35,1,1,conclusion_5,accepted_reference,external_tmp_not_committed
+1121428643831087110,Converting $PT$-Symmetric Topological Classes by Floquet Engineering,10.48550/arxiv.2504.14846,ok,31,35,1,1,conclusion_5;conclusion_4,accepted_reference,external_tmp_not_committed
 811951314077483010,Theoretical investigation of terahertz optical sidebands in a single quantum dot,10.1103/physrevb.76.245318,ok,34,32,1,1,not_selected,screened_not_selected,external_tmp_not_committed
 812123278570160133,Superfluid-Insulator Transition in a Periodically Driven Optical Lattice,10.1103/physrevlett.95.260404,ok,33,34,1,1,conclusion_1;conclusion_3,accepted_reference,external_tmp_not_committed
 812308293425823745,Stabilizing quantum metastable states in a time-periodic potential,10.1103/physreva.71.012102,ok,35,37,1,1,conclusion_1,accepted_reference,external_tmp_not_committed

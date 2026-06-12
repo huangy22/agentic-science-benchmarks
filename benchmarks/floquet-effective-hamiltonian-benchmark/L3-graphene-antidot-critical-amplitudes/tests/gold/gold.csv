@@ -1,2 +1,6 @@
 case_id,E0c1,E0c2
 hid_graphene_circle1_refined,2.15,4.62
+hid_graphene_circle1_sparse,2.15,4.62
+hid_graphene_circle1_dense,2.15,4.62
+hid_graphene_circle1_unsorted,2.15,4.62
+hid_graphene_circle1_noisy,2.15,4.62

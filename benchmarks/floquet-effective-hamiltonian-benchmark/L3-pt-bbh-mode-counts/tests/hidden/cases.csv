@@ -1,2 +1,6 @@
 case_id,paper_id,reference_case_id,N0,Npi,VR
-hid_pt_bbh_same_gap,1121428643831087110,flq_l3_pt_bbh_indices_same_gap,-2,4,1
+hid_pt_bbh_same_gap_reported,1121428643831087110,flq_l3_pt_bbh_indices_same_gap,-2,4,1
+hid_pt_bbh_same_gap_open_xy,1121428643831087110,flq_l3_pt_bbh_indices_same_gap,-2,4,1
+hid_pt_bbh_same_gap_mode_count,1121428643831087110,flq_l3_pt_bbh_indices_same_gap,-2,4,1
+hid_pt_bbh_split_gap_reported,1121428643831087110,flq_l3_pt_bbh_indices_split_gap,0,4,1
+hid_pt_bbh_split_gap_mode_count,1121428643831087110,flq_l3_pt_bbh_indices_split_gap,0,4,1

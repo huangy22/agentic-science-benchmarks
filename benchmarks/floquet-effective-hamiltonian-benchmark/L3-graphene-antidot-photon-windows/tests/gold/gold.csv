@@ -1,3 +1,6 @@
 case_id,window_low_eV,window_high_eV
 hid_circle_D_3p7,1.13,1.15
 hid_triangle_s_3p2,0.78,0.85
+hid_circle_D_1p6_dense,0.72,0.81
+hid_triangle_s_1p4_dense,0.71,0.77
+hid_circle_D_3p7_sparse,1.13,1.15

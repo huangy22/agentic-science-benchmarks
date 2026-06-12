@@ -86,6 +86,8 @@ BENCHMARK_MANIFEST_COLUMNS = [
     "notes",
 ]
 
+MIN_HIDDEN_CASES_PER_RUNNABLE_TASK = 5
+
 
 def fail(message: str) -> int:
     print(f"FAIL: {message}", file=sys.stderr)
@@ -301,6 +303,68 @@ def main() -> int:
                     f"row {i} source node {node_name!r} is absent from manifest"
                 )
 
+    all_packet_refs: set[str] = set()
+    min_hidden_seen: int | None = None
+    for task in paper_derived_tasks:
+        task_path = ROOT / task["task_path"]
+        task_ref_ids = {
+            ref_id.strip()
+            for ref_id in task["reference_case_ids"].split(";")
+            if ref_id.strip()
+        }
+        case_files = [
+            ("public", task_path / "environment" / "packet" / "cases.csv"),
+            ("hidden", task_path / "tests" / "hidden" / "cases.csv"),
+        ]
+        for kind, case_file in case_files:
+            if not case_file.exists():
+                return fail(f"{task['task_id']}: missing {kind} cases {case_file}")
+            with case_file.open(newline="") as f:
+                case_reader = csv.DictReader(f)
+                case_rows = list(case_reader)
+            if "reference_case_id" not in (case_reader.fieldnames or []):
+                return fail(
+                    f"{case_file}: missing reference_case_id column for "
+                    "paper-derived task"
+                )
+            if "paper_id" not in (case_reader.fieldnames or []):
+                return fail(f"{case_file}: missing paper_id column")
+            if kind == "hidden":
+                min_hidden_seen = (
+                    len(case_rows)
+                    if min_hidden_seen is None
+                    else min(min_hidden_seen, len(case_rows))
+                )
+                if len(case_rows) < MIN_HIDDEN_CASES_PER_RUNNABLE_TASK:
+                    return fail(
+                        f"{case_file}: hidden case count {len(case_rows)} is below "
+                        f"{MIN_HIDDEN_CASES_PER_RUNNABLE_TASK}"
+                    )
+            for case in case_rows:
+                ref_id = case["reference_case_id"]
+                all_packet_refs.add(ref_id)
+                ref = accepted_by_case.get(ref_id)
+                if ref is None:
+                    return fail(
+                        f"{case_file}: reference_case_id {ref_id!r} is not an "
+                        "accepted reference"
+                    )
+                if ref_id not in task_ref_ids:
+                    return fail(
+                        f"{case_file}: {ref_id!r} is absent from manifest "
+                        f"reference_case_ids for {task['task_id']}"
+                    )
+                if ref["level"] != task["level"]:
+                    return fail(
+                        f"{case_file}: {ref_id!r} level {ref['level']} does not "
+                        f"match task level {task['level']}"
+                    )
+                if case["paper_id"] != ref["paper_id"]:
+                    return fail(
+                        f"{case_file}: paper_id mismatch for {case['case_id']} "
+                        f"({case['paper_id']} != {ref['paper_id']})"
+                    )
+
     l1_case_files = [
         RUNNABLE_L1 / "environment" / "packet" / "cases.csv",
         RUNNABLE_L1 / "tests" / "hidden" / "cases.csv",
@@ -467,7 +531,11 @@ def main() -> int:
         return fail("runnable L3 task does not cover graphene photon windows row")
     if "flq_l3_pt_bbh_indices_same_gap" not in l3_runnable_refs:
         return fail("runnable L3 task does not cover PT-BBH same-gap row")
-    required_manifest_refs = runnable_refs | l2_runnable_refs | l3_runnable_refs
+    if "flq_l3_pt_bbh_indices_split_gap" not in l3_runnable_refs:
+        return fail("runnable L3 task does not cover PT-BBH split-gap row")
+    required_manifest_refs = (
+        runnable_refs | l2_runnable_refs | l3_runnable_refs | all_packet_refs
+    )
     if not required_manifest_refs.issubset(manifest_refs):
         missing = sorted(required_manifest_refs - manifest_refs)
         return fail(f"benchmark manifest missing runnable references: {missing}")
@@ -478,6 +546,7 @@ def main() -> int:
     print(f"runnable_paper_derived_tasks={len(paper_derived_tasks)}")
     print(f"runnable_paper_derived_papers={len(manifest_papers)}")
     print(f"runnable_l3_papers={len(manifest_l3_papers)}")
+    print(f"min_hidden_cases_per_task={min_hidden_seen}")
     for level in ("L1", "L2", "L3"):
         print(f"accepted[{level}]={accepted_levels[level]}")
     return 0

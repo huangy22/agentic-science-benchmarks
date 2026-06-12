@@ -20,19 +20,11 @@ This task comes from `flq_l3_pt_bbh_indices_same_gap` in
 `data/floquet_reference.csv`, sourced from paper id `1121428643831087110`.
 
 The paper uses Floquet engineering in a PT-symmetric extended BBH model. For a
-given case, you are provided the chiral indices `N0`, `Npi`, and the real Chern
-number `VR`.
-
-Use the paper's counting rules:
-
-```text
-zero_gap_corner_states = 4 * abs(N0)
-pi_gap_corner_states = 4 * abs(Npi)
-first_order_boundary_pairs = VR
-```
-
-The same-gap coexistence flag is `1` when the zero gap contains both
-second-order corner states and a first-order boundary pair, and `0` otherwise.
+given case, you are provided the dressed chiral indices `N0` and `Npi`, plus
+the real Chern number `VR`. Use the index-to-boundary correspondence discussed
+in the paper to report the zero-gap corner-state count, the pi-gap corner-state
+count, the first-order boundary-pair count, and whether the zero gap hosts
+coexisting first- and second-order boundary phenomena.
 
 ## Input
 

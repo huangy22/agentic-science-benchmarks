@@ -20,19 +20,16 @@ This task comes from `flq_l2_kicked_ssh_quasienergy_formula` in
 `data/floquet_reference.csv`, sourced from paper id `812585024850231297`.
 
 For each row, compute the principal-branch quasienergy for the unidirectional
-Z-kick case:
+Z-kick case by constructing the one-period Floquet propagator
 
 ```text
-E_k = sqrt(dx^2 + dy^2 + dz^2)
-
-epsilon_k = (1 / T) arccos[
-    cos(alpha_z) cos(E_k T)
-    - (dz / E_k) sin(alpha_z) sin(E_k T)
-]
+U_F(k) = exp(-i alpha_z sigma_z) exp[-i T (dx sigma_x + dy sigma_y + dz sigma_z)].
 ```
 
-Clamp the argument of `arccos` to `[-1, 1]` only to protect against floating
-roundoff. All hidden inputs have nonzero `E_k`.
+The principal quasienergy is the positive value `epsilon` in `[0, pi/T]` whose
+phase eigenvalues are `exp(+/- i epsilon T)`. Clamp only the trace-derived
+cosine to `[-1, 1]` to protect against floating roundoff. All hidden inputs have
+nonzero `sqrt(dx^2 + dy^2 + dz^2)`.
 
 ## Input
 

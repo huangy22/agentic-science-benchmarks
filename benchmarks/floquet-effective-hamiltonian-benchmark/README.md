@@ -29,6 +29,8 @@ data-provenance pattern of `kunyuan/dfpt-lambda-benchmark`.
   papers, reference rows, hidden-gold type, and selfcheck commands.
 - `acceptance.md`: explicit source, coverage, scoring, and mechanical acceptance
   criteria.
+- `VALIDATION.md`: audit record of LKM/original-content checks, verifier
+  isolation, negative selfchecks, and remaining reproduction depth.
 
 - `L1-paper-formula-renormalization/`: the current runnable paper-derived task,
   built from the accepted L1 rows of `data/floquet_reference.csv`.
@@ -47,7 +49,7 @@ data-provenance pattern of `kunyuan/dfpt-lambda-benchmark`.
 - `L1-driven-qubit-effective-hamiltonian/`: retained only as a synthetic
   prototype for verifier mechanics. It is not the paper-derived benchmark.
 
-The reference table currently contains 15 candidate cases, 13 of them accepted
+The reference table currently contains 16 candidate cases, 14 of them accepted
 as LKM-graph-backed references, spanning 9 papers. It deliberately keeps
 `needs_original_paper` rows in the table as promising but not-yet-hidden-scored
 targets.
@@ -97,3 +99,9 @@ bash benchmarks/floquet-effective-hamiltonian-benchmark/L3-pt-bbh-mode-counts/sc
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L1-driven-qubit-effective-hamiltonian/scripts/selfcheck.sh
 python benchmarks/floquet-effective-hamiltonian-benchmark/scripts/validate_reference.py
 ```
+
+Each paper-derived `scripts/selfcheck.sh` performs an oracle PASS, a
+perturbed-output must-FAIL scorer check, and a local execution of the
+Harbor-style verifier contract. The verifier writes `reward.txt` under the task
+local `.verifier_logs/` directory outside container mode, or under
+`/logs/verifier/` in Harbor-style container mode.

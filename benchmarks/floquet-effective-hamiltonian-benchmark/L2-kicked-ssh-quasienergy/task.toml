@@ -3,7 +3,7 @@ version = "1.0"
 [metadata]
 author_name = "Gaia workflow #1069 - paper-derived L2 kicked SSH quasienergy"
 author_email = "noreply@example.com"
-difficulty_explanation = "Given h-vector samples for the periodically kicked extended SSH model, compute the principal-branch Z-kick Floquet quasienergy from the paper-derived formula. The task is tied to flq_l2_kicked_ssh_quasienergy_formula in data/floquet_reference.csv and tests branch handling over concealed numeric cases."
+difficulty_explanation = "Given h-vector samples for the periodically kicked extended SSH model, construct the one-period Z-kick Floquet propagator and compute the principal-branch quasienergy. The task is tied to flq_l2_kicked_ssh_quasienergy_formula in data/floquet_reference.csv and tests branch handling over concealed numeric cases."
 category = "scientific-computing"
 tags = ["physics", "floquet", "effective-hamiltonian", "quasienergy", "ssh-model", "kicked-system", "paper-derived", "workflow-1069", "level-2"]
 
