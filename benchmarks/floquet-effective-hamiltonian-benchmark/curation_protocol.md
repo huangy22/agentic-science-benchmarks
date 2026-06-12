@@ -15,12 +15,15 @@ can enter a scored hidden set.
    `POST https://open.bohrium.com/openapi/v1/lkm/papers/graph`.
 4. Bohrium LKM reasoning search scoped to workflow paper ids:
    `POST https://open.bohrium.com/openapi/v1/lkm/reasoning/search`.
-5. Original paper text or figures, used only for cases marked
-   `needs_original_paper` before promotion into a scored split.
+5. Bohrium LKM batch paper-content endpoint for original-text checks:
+   `POST https://open.bohrium.com/openapi/v1/lkm/papers/content/batch`.
+6. External original paper text, source files, or figures, used as fallback for
+   cases marked `needs_original_paper` when the LKM content endpoint is
+   unavailable or incomplete.
 
-The access key is never stored in this repository. Raw LKM graph JSON should be
-kept outside the repo unless a short, source-node-linked excerpt is needed for
-audit.
+The access key is never stored in this repository. Raw LKM graph/content JSON
+should be kept outside the repo unless a short, source-node-linked excerpt is
+needed for audit.
 
 ## Levels
 
@@ -57,7 +60,8 @@ Acceptance:
 - the task uses a real paper's model, drive protocol, and observable;
 - source provenance includes `paper_id` and `source_node_id`;
 - any figure-derived or table-derived gold is cross-checked against the original
-  paper before entering hidden scoring.
+  paper before entering hidden scoring, preferably via
+  `/papers/content/batch`.
 
 ## Required Reference Fields
 
@@ -123,4 +127,6 @@ Before a case enters a runnable benchmark:
    unless the row is explicitly rejected or awaiting original-paper recovery.
 7. Any hidden-scoring row whose gold comes from a figure, interval, experimental
    spectrum, or Hamiltonian-convention-sensitive calculation has an original
-   paper check recorded before it is promoted.
+   paper check recorded before it is promoted. Prefer
+   `POST /papers/content/batch` for this check and record any fallback source in
+   `data/original_paper_checks.csv`.

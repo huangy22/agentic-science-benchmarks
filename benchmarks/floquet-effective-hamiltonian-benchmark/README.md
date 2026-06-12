@@ -33,6 +33,8 @@ data-provenance pattern of `kunyuan/dfpt-lambda-benchmark`.
 - `L3-graphene-antidot-critical-amplitudes/`: a runnable L3 scan-recovery task
   whose critical amplitudes are backed by both LKM and original arXiv source
   checks.
+- `L3-graphene-antidot-photon-windows/`: a runnable L3 window-recovery task for
+  the graphene antidot photon-energy validity ranges.
 - `L1-driven-qubit-effective-hamiltonian/`: retained only as a synthetic
   prototype for verifier mechanics. It is not the paper-derived benchmark.
 
@@ -51,7 +53,11 @@ The intended source chain is:
 3. per-paper LKM graph retrieval for selected candidates;
 4. source-node excerpts stored in `data/floquet_reference.csv`;
 5. original-paper text, figure, or table checks before hidden grading when the
-   LKM graph does not fully specify the scoring target.
+   LKM graph does not fully specify the scoring target. Prefer the Bohrium LKM
+   batch paper-content endpoint
+   `POST https://open.bohrium.com/openapi/v1/lkm/papers/content/batch`; use
+   arXiv/PDF/source files only as a fallback when the content endpoint is
+   unavailable or incomplete.
 
 This mirrors the `dfpt-lambda-benchmark` split between central reference data,
 extraction/provenance artifacts, and runnable task folders.
@@ -76,6 +82,7 @@ gold observable, and a source LKM node or original-paper cross-check.
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L1-paper-formula-renormalization/scripts/selfcheck.sh
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L2-kicked-ssh-quasienergy/scripts/selfcheck.sh
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L3-graphene-antidot-critical-amplitudes/scripts/selfcheck.sh
+bash benchmarks/floquet-effective-hamiltonian-benchmark/L3-graphene-antidot-photon-windows/scripts/selfcheck.sh
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L1-driven-qubit-effective-hamiltonian/scripts/selfcheck.sh
 python benchmarks/floquet-effective-hamiltonian-benchmark/scripts/validate_reference.py
 ```

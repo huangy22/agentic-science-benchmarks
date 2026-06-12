@@ -1,0 +1,17 @@
+version = "1.0"
+
+[metadata]
+author_name = "Gaia workflow #1069 - paper-derived L3 graphene antidot photon windows"
+author_email = "noreply@example.com"
+difficulty_explanation = "Given photon-energy grids for Floquet graphene antidot geometries, recover the contiguous energy window satisfying the paper's two Floquet-model constraints. Gold is tied to flq_l3_graphene_antidot_photon_windows and cross-checked against the arXiv source."
+category = "scientific-computing"
+tags = ["physics", "floquet", "graphene-antidot", "photon-energy", "validity-window", "paper-derived", "workflow-1069", "level-3"]
+
+[verifier]
+timeout_sec = 120.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 600.0

@@ -11,7 +11,8 @@ SOURCE_MANIFEST = ROOT / "data" / "lkm_source_manifest.csv"
 ORIGINAL_CHECKS = ROOT / "data" / "original_paper_checks.csv"
 RUNNABLE_L1 = ROOT / "L1-paper-formula-renormalization"
 RUNNABLE_L2 = ROOT / "L2-kicked-ssh-quasienergy"
-RUNNABLE_L3 = ROOT / "L3-graphene-antidot-critical-amplitudes"
+RUNNABLE_L3_CRITICAL = ROOT / "L3-graphene-antidot-critical-amplitudes"
+RUNNABLE_L3_WINDOWS = ROOT / "L3-graphene-antidot-photon-windows"
 
 REQUIRED_COLUMNS = [
     "case_id",
@@ -207,12 +208,12 @@ def main() -> int:
     if "flq_l2_kicked_ssh_quasienergy_formula" not in l2_runnable_refs:
         return fail("runnable L2 task does not cover kicked SSH quasienergy row")
 
-    l3_case_files = [
-        RUNNABLE_L3 / "environment" / "packet" / "cases.csv",
-        RUNNABLE_L3 / "tests" / "hidden" / "cases.csv",
+    l3_scan_case_files = [
+        RUNNABLE_L3_CRITICAL / "environment" / "packet" / "cases.csv",
+        RUNNABLE_L3_CRITICAL / "tests" / "hidden" / "cases.csv",
     ]
     l3_runnable_refs: set[str] = set()
-    for case_file in l3_case_files:
+    for case_file in l3_scan_case_files:
         case_dir = case_file.parent
         for row in load_csv(case_file):
             ref_id = row["reference_case_id"]
@@ -239,8 +240,41 @@ def main() -> int:
                 )
             if original_check["paper_id"] != ref["paper_id"]:
                 return fail(f"{case_file}: original-check paper mismatch for {ref_id}")
+    l3_grid_case_files = [
+        RUNNABLE_L3_WINDOWS / "environment" / "packet" / "cases.csv",
+        RUNNABLE_L3_WINDOWS / "tests" / "hidden" / "cases.csv",
+    ]
+    for case_file in l3_grid_case_files:
+        case_dir = case_file.parent
+        for row in load_csv(case_file):
+            ref_id = row["reference_case_id"]
+            l3_runnable_refs.add(ref_id)
+            ref = accepted_by_case.get(ref_id)
+            if ref is None:
+                return fail(f"{case_file}: unknown accepted reference {ref_id!r}")
+            if ref["level"] != "L3":
+                return fail(f"{case_file}: {ref_id!r} is not an L3 reference")
+            if row["paper_id"] != ref["paper_id"]:
+                return fail(
+                    f"{case_file}: paper_id mismatch for {row['case_id']} "
+                    f"({row['paper_id']} != {ref['paper_id']})"
+                )
+            grid_path = case_dir / row["grid_file"]
+            if not grid_path.exists():
+                return fail(f"{case_file}: missing grid file {grid_path}")
+            original_check = original_by_case.get(ref_id)
+            if original_check is None:
+                return fail(f"{case_file}: {ref_id!r} lacks original-paper check")
+            if original_check["check_status"] != "confirmed":
+                return fail(
+                    f"{case_file}: {ref_id!r} original-paper check is not confirmed"
+                )
+            if original_check["paper_id"] != ref["paper_id"]:
+                return fail(f"{case_file}: original-check paper mismatch for {ref_id}")
     if "flq_l3_graphene_antidot_critical_amplitudes" not in l3_runnable_refs:
         return fail("runnable L3 task does not cover graphene critical amplitudes row")
+    if "flq_l3_graphene_antidot_photon_windows" not in l3_runnable_refs:
+        return fail("runnable L3 task does not cover graphene photon windows row")
 
     print("PASS")
     print(f"rows={len(rows)} accepted={len(accepted)} papers={len(paper_ids)}")

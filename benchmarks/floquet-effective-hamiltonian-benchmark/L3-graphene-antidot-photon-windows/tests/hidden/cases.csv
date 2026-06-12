@@ -1,0 +1,3 @@
+case_id,paper_id,reference_case_id,geometry,grid_file
+hid_circle_D_3p7,867767689039315299,flq_l3_graphene_antidot_photon_windows,circle_D_3p7_nm,grids/hidden_circle_D_3p7.csv
+hid_triangle_s_3p2,867767689039315299,flq_l3_graphene_antidot_photon_windows,triangle_s_3p2_nm,grids/hidden_triangle_s_3p2.csv

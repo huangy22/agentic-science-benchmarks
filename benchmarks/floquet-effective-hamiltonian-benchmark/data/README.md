@@ -15,6 +15,20 @@ benchmark tracks.
 | `lkm_source_manifest.csv` | Paper-graph audit manifest for the LKM payloads inspected while building `floquet_reference.csv`. |
 | `original_paper_checks.csv` | Short original-paper verification ledger for rows promoted beyond LKM-only evidence. |
 
+## Original Paper Content
+
+For original-text verification, prefer the Bohrium LKM batch content endpoint:
+
+```text
+POST https://open.bohrium.com/openapi/v1/lkm/papers/content/batch
+```
+
+Use this endpoint to confirm figure/table intervals, parameter conventions, and
+display precision before a row is promoted into hidden scoring. External
+arXiv/PDF/source-file checks are acceptable fallbacks only when the LKM content
+endpoint is unavailable or incomplete; record the fallback explicitly in
+`original_paper_checks.csv`.
+
 ## Reference-Repo Pattern
 
 The reference repository `kunyuan/dfpt-lambda-benchmark` uses:
@@ -41,14 +55,16 @@ This Floquet benchmark mirrors that shape, with smaller initial scope:
 
 ## Current Source Boundary
 
-The current accepted references are grounded in Bohrium LKM paper graphs and
-reasoning search over workflow `#1069` paper ids. Full raw LKM JSON payloads are
-not committed because they are large and may contain unstable service metadata;
-the stable audit surface is the paper id, source node id, source excerpt, graph
+The current accepted references are grounded in Bohrium LKM paper graphs,
+reasoning search over workflow `#1069` paper ids, and targeted original-text
+checks for promoted L3 hidden gold. Full raw LKM JSON payloads are not committed
+because they are large and may contain unstable service metadata; the stable
+audit surface is the paper id, source node id, source excerpt, graph/content
 status, and bibliographic metadata recorded here.
 
 Before a row becomes hidden grading gold, run a second-source check against the
-original paper text, figures, or tables when any of the following are true:
+original paper text, figures, or tables, preferably through
+`/papers/content/batch`, when any of the following are true:
 
 - the gold is read from a figure, window, or qualitative visual transition;
 - the LKM node does not specify Hamiltonian convention or boundary conditions;
