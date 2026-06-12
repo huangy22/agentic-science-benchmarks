@@ -13,6 +13,8 @@ prototype and must not be counted toward paper-derived coverage.
   `benchmark_manifest.csv`.
 - Any L3 hidden gold based on a figure, interval, scan, or experimental
   observable must have a `confirmed` row in `data/original_paper_checks.csv`.
+- Confirmed LKM-content checks must also list machine-checkable terms in
+  `data/original_paper_check_terms.csv`.
 - Promoted L3 hidden gold must be checked through
   `POST https://open.bohrium.com/openapi/v1/lkm/papers/content/batch` unless an
   explicit fallback is recorded and justified.
@@ -52,3 +54,9 @@ python benchmarks/floquet-effective-hamiltonian-benchmark/scripts/validate_refer
 
 The synthetic prototype selfcheck may also be run, but it is not part of the
 paper-derived acceptance count.
+
+When `GAIA_LKM_ACCESS_KEY` or `LKM_ACCESS_KEY` is available, also run:
+
+```bash
+python benchmarks/floquet-effective-hamiltonian-benchmark/scripts/verify_lkm_content_checks.py
+```

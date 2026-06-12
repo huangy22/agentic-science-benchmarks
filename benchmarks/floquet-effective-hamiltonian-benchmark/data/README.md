@@ -14,6 +14,7 @@ benchmark tracks.
 | `floquet_reference.csv` | Curated candidate/gold cases across L1, L2, and L3. This is the main reference table. |
 | `lkm_source_manifest.csv` | Paper-graph audit manifest for the LKM payloads inspected while building `floquet_reference.csv`. |
 | `original_paper_checks.csv` | Short original-paper verification ledger for rows promoted beyond LKM-only evidence. |
+| `original_paper_check_terms.csv` | Machine-checkable terms that must be found in LKM paper-content markdown for promoted L3 rows. |
 
 ## Original Paper Content
 
@@ -30,6 +31,12 @@ conventions, and display precision before a row is promoted into hidden scoring.
 External arXiv/PDF/source-file checks are acceptable fallbacks only when the LKM
 content endpoint is unavailable or incomplete; record the fallback explicitly in
 `original_paper_checks.csv`.
+
+To rerun the current LKM-content checks when an access key is available:
+
+```bash
+python benchmarks/floquet-effective-hamiltonian-benchmark/scripts/verify_lkm_content_checks.py
+```
 
 ## Reference-Repo Pattern
 

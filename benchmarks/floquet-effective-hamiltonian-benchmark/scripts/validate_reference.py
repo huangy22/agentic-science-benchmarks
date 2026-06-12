@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REFERENCE = ROOT / "data" / "floquet_reference.csv"
 SOURCE_MANIFEST = ROOT / "data" / "lkm_source_manifest.csv"
 ORIGINAL_CHECKS = ROOT / "data" / "original_paper_checks.csv"
+ORIGINAL_CHECK_TERMS = ROOT / "data" / "original_paper_check_terms.csv"
 BENCHMARK_MANIFEST = ROOT / "benchmark_manifest.csv"
 RUNNABLE_L1 = ROOT / "L1-paper-formula-renormalization"
 RUNNABLE_L2 = ROOT / "L2-kicked-ssh-quasienergy"
@@ -63,6 +64,12 @@ ORIGINAL_CHECK_COLUMNS = [
     "notes",
 ]
 
+ORIGINAL_CHECK_TERMS_COLUMNS = [
+    "reference_case_id",
+    "paper_id",
+    "required_terms",
+]
+
 BENCHMARK_MANIFEST_COLUMNS = [
     "task_id",
     "level",
@@ -101,6 +108,10 @@ def main() -> int:
         original_reader = csv.DictReader(f)
         original_rows = list(original_reader)
 
+    with ORIGINAL_CHECK_TERMS.open(newline="") as f:
+        original_terms_reader = csv.DictReader(f)
+        original_terms_rows = list(original_terms_reader)
+
     with BENCHMARK_MANIFEST.open(newline="") as f:
         benchmark_manifest_reader = csv.DictReader(f)
         benchmark_manifest_rows = list(benchmark_manifest_reader)
@@ -121,6 +132,12 @@ def main() -> int:
         return fail(
             "unexpected original-check columns: "
             f"{original_reader.fieldnames!r}; expected {ORIGINAL_CHECK_COLUMNS!r}"
+        )
+    if original_terms_reader.fieldnames != ORIGINAL_CHECK_TERMS_COLUMNS:
+        return fail(
+            "unexpected original-check-terms columns: "
+            f"{original_terms_reader.fieldnames!r}; "
+            f"expected {ORIGINAL_CHECK_TERMS_COLUMNS!r}"
         )
     if benchmark_manifest_reader.fieldnames != BENCHMARK_MANIFEST_COLUMNS:
         return fail(
@@ -154,6 +171,20 @@ def main() -> int:
     original_by_case = {r["reference_case_id"]: r for r in original_rows}
     if len(original_by_case) != len(original_rows):
         return fail("original paper checks have duplicate reference_case_id values")
+    original_terms_by_case = {
+        r["reference_case_id"]: r for r in original_terms_rows
+    }
+    if len(original_terms_by_case) != len(original_terms_rows):
+        return fail("original paper check terms have duplicate reference_case_id values")
+    for ref_id, row in original_terms_by_case.items():
+        check = original_by_case.get(ref_id)
+        if check is None:
+            return fail(f"terms row references unknown original check {ref_id!r}")
+        if row["paper_id"] != check["paper_id"]:
+            return fail(f"terms paper_id mismatch for {ref_id!r}")
+        terms = [term.strip() for term in row["required_terms"].split(";")]
+        if not [term for term in terms if term]:
+            return fail(f"terms row has no required terms for {ref_id!r}")
 
     task_ids = [r["task_id"] for r in benchmark_manifest_rows]
     task_dupes = [tid for tid, n in Counter(task_ids).items() if n > 1]
@@ -307,6 +338,8 @@ def main() -> int:
             original_check = original_by_case.get(ref_id)
             if original_check is None:
                 return fail(f"{case_file}: {ref_id!r} lacks original-paper check")
+            if ref_id not in original_terms_by_case:
+                return fail(f"{case_file}: {ref_id!r} lacks original-paper check terms")
             if original_check["check_status"] != "confirmed":
                 return fail(
                     f"{case_file}: {ref_id!r} original-paper check is not confirmed"
@@ -343,6 +376,8 @@ def main() -> int:
             original_check = original_by_case.get(ref_id)
             if original_check is None:
                 return fail(f"{case_file}: {ref_id!r} lacks original-paper check")
+            if ref_id not in original_terms_by_case:
+                return fail(f"{case_file}: {ref_id!r} lacks original-paper check terms")
             if original_check["check_status"] != "confirmed":
                 return fail(
                     f"{case_file}: {ref_id!r} original-paper check is not confirmed"
