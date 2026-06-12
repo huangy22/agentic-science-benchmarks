@@ -1,0 +1,17 @@
+version = "1.0"
+
+[metadata]
+author_name = "Gaia workflow #1069 - paper-derived L1 Floquet formulas"
+author_email = "noreply@example.com"
+difficulty_explanation = "Given formula families extracted from real Floquet effective-Hamiltonian papers, compute Bessel-renormalized tunneling/couplings or a high-frequency photoinduced term for concealed numeric parameters. Each case points back to data/floquet_reference.csv via reference_case_id; hidden cases vary only numerical inputs, not the paper-derived formula family."
+category = "scientific-computing"
+tags = ["physics", "floquet", "effective-hamiltonian", "bessel", "high-frequency-expansion", "paper-derived", "workflow-1069", "level-1"]
+
+[verifier]
+timeout_sec = 120.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 600.0

@@ -1,0 +1,9 @@
+case_id,formula,paper_id,reference_case_id,x,phi0,J,omega,E0
+hid_bh_01,bh_bessel_tunneling,812123278570160133,flq_l1_bh_bessel_tunneling,0.75,0,0,0,0
+hid_bh_02,bh_bessel_tunneling,812123278570160133,flq_l1_bh_bessel_tunneling,2.4048255577,0,0,0,0
+hid_raman_01,raman_coupling,867750313874948107,flq_l1_raman_coupling_renormalization,0.9,1.2,0,0,0
+hid_raman_02,raman_coupling,867750313874948107,flq_l1_raman_coupling_renormalization,1.8,2.4,0,0,0
+hid_bec_01,binary_bec_tunneling,867773104561062088,flq_l1_binary_bec_tunneling_suppression,1.25,0,0,0,0
+hid_bec_02,binary_bec_tunneling,867773104561062088,flq_l1_binary_bec_tunneling_suppression,2.7,0,0,0,0
+hid_magnon_01,magnon_dm,867768599207478048,flq_l1_magnon_dm_high_frequency,0,0,1.0,12.0,0.45
+hid_magnon_02,magnon_dm,867768599207478048,flq_l1_magnon_dm_high_frequency,0,0,1.8,9.5,1.1
