@@ -34,6 +34,9 @@ data-provenance pattern of `kunyuan/dfpt-lambda-benchmark`.
   built from the accepted L1 rows of `data/floquet_reference.csv`.
 - `L2-kicked-ssh-quasienergy/`: a runnable paper-derived L2 task built from the
   accepted kicked extended SSH quasienergy row.
+- `L2-square-well-complex-quasienergies/`: a runnable paper-derived L2 task
+  whose complex quasienergy targets are checked against Bohrium LKM
+  `papers/content/batch` original text.
 - `L3-graphene-antidot-critical-amplitudes/`: a runnable L3 scan-recovery task
   whose critical amplitudes are backed by both LKM and original arXiv source
   checks.
@@ -85,6 +88,7 @@ gold observable, and a source LKM node or original-paper cross-check.
 ```bash
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L1-paper-formula-renormalization/scripts/selfcheck.sh
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L2-kicked-ssh-quasienergy/scripts/selfcheck.sh
+bash benchmarks/floquet-effective-hamiltonian-benchmark/L2-square-well-complex-quasienergies/scripts/selfcheck.sh
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L3-graphene-antidot-critical-amplitudes/scripts/selfcheck.sh
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L3-graphene-antidot-photon-windows/scripts/selfcheck.sh
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L1-driven-qubit-effective-hamiltonian/scripts/selfcheck.sh

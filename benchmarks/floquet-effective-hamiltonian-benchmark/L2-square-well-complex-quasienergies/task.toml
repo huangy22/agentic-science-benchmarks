@@ -1,0 +1,17 @@
+version = "1.0"
+
+[metadata]
+author_name = "Gaia workflow #1069 - paper-derived L2 square-well quasienergies"
+author_email = "noreply@example.com"
+difficulty_explanation = "Given the complex Floquet quasienergies reported for a driven metastable square-well/barrier model, identify the more and less stable states and compute energy, decay width, energy splitting, and lifetime ratio. The source values are tied to flq_l2_driven_square_well_quasienergies and verified against LKM paper-content markdown."
+category = "scientific-computing"
+tags = ["physics", "floquet", "complex-quasienergy", "metastable-state", "square-well", "paper-derived", "workflow-1069", "level-2"]
+
+[verifier]
+timeout_sec = 120.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 600.0

@@ -11,11 +11,13 @@ prototype and must not be counted toward paper-derived coverage.
   source excerpt, level, scoring tolerance, and verification mode.
 - Every runnable paper-derived task must list its reference rows and paper ids in
   `benchmark_manifest.csv`.
-- Any L3 hidden gold based on a figure, interval, scan, or experimental
-  observable must have a `confirmed` row in `data/original_paper_checks.csv`.
+- Any hidden gold based on a paper figure, interval, scan, complex
+  quasienergy, or experimental observable must have a `confirmed` row in
+  `data/original_paper_checks.csv`.
 - Confirmed LKM-content checks must also list machine-checkable terms in
   `data/original_paper_check_terms.csv`.
-- Promoted L3 hidden gold must be checked through
+- Any task with `original_check_required=yes` in `benchmark_manifest.csv` must
+  be checked through
   `POST https://open.bohrium.com/openapi/v1/lkm/papers/content/batch` unless an
   explicit fallback is recorded and justified.
 
@@ -47,6 +49,7 @@ Before declaring the benchmark ready:
 ```bash
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L1-paper-formula-renormalization/scripts/selfcheck.sh
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L2-kicked-ssh-quasienergy/scripts/selfcheck.sh
+bash benchmarks/floquet-effective-hamiltonian-benchmark/L2-square-well-complex-quasienergies/scripts/selfcheck.sh
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L3-graphene-antidot-critical-amplitudes/scripts/selfcheck.sh
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L3-graphene-antidot-photon-windows/scripts/selfcheck.sh
 python benchmarks/floquet-effective-hamiltonian-benchmark/scripts/validate_reference.py

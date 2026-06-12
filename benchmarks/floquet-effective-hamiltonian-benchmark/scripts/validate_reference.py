@@ -12,7 +12,8 @@ ORIGINAL_CHECKS = ROOT / "data" / "original_paper_checks.csv"
 ORIGINAL_CHECK_TERMS = ROOT / "data" / "original_paper_check_terms.csv"
 BENCHMARK_MANIFEST = ROOT / "benchmark_manifest.csv"
 RUNNABLE_L1 = ROOT / "L1-paper-formula-renormalization"
-RUNNABLE_L2 = ROOT / "L2-kicked-ssh-quasienergy"
+RUNNABLE_L2_KICKED = ROOT / "L2-kicked-ssh-quasienergy"
+RUNNABLE_L2_SQUARE = ROOT / "L2-square-well-complex-quasienergies"
 RUNNABLE_L3_CRITICAL = ROOT / "L3-graphene-antidot-critical-amplitudes"
 RUNNABLE_L3_WINDOWS = ROOT / "L3-graphene-antidot-photon-windows"
 PROTOTYPE = ROOT / "L1-driven-qubit-effective-hamiltonian"
@@ -221,6 +222,34 @@ def main() -> int:
                         f"manifest level mismatch for {row['task_id']} -> {ref_id}"
                     )
                 manifest_refs.add(ref_id)
+                if row["original_check_required"] == "yes":
+                    original_check = original_by_case.get(ref_id)
+                    if original_check is None:
+                        return fail(
+                            f"manifest task {row['task_id']} requires original "
+                            f"check, but {ref_id!r} has no check row"
+                        )
+                    if ref_id not in original_terms_by_case:
+                        return fail(
+                            f"manifest task {row['task_id']} requires original "
+                            f"check, but {ref_id!r} has no term row"
+                        )
+                    if original_check["check_status"] != "confirmed":
+                        return fail(
+                            f"manifest task {row['task_id']} original check for "
+                            f"{ref_id!r} is not confirmed"
+                        )
+                    if original_check["paper_id"] != ref["paper_id"]:
+                        return fail(
+                            f"manifest task {row['task_id']} original-check "
+                            f"paper mismatch for {ref_id!r}"
+                        )
+                    if "papers/content/batch" not in original_check["original_source"]:
+                        return fail(
+                            f"manifest task {row['task_id']} original check for "
+                            f"{ref_id!r} must use LKM papers/content/batch unless "
+                            "explicitly downgraded"
+                        )
             for paper_id in row["paper_ids"].split(";"):
                 if not paper_id.isdigit():
                     return fail(f"manifest paper id is not numeric: {paper_id!r}")
@@ -292,8 +321,10 @@ def main() -> int:
 
     l2_runnable_refs: set[str] = set()
     l2_case_files = [
-        RUNNABLE_L2 / "environment" / "packet" / "cases.csv",
-        RUNNABLE_L2 / "tests" / "hidden" / "cases.csv",
+        RUNNABLE_L2_KICKED / "environment" / "packet" / "cases.csv",
+        RUNNABLE_L2_KICKED / "tests" / "hidden" / "cases.csv",
+        RUNNABLE_L2_SQUARE / "environment" / "packet" / "cases.csv",
+        RUNNABLE_L2_SQUARE / "tests" / "hidden" / "cases.csv",
     ]
     for case_file in l2_case_files:
         for row in load_csv(case_file):
@@ -311,6 +342,8 @@ def main() -> int:
                 )
     if "flq_l2_kicked_ssh_quasienergy_formula" not in l2_runnable_refs:
         return fail("runnable L2 task does not cover kicked SSH quasienergy row")
+    if "flq_l2_driven_square_well_quasienergies" not in l2_runnable_refs:
+        return fail("runnable L2 task does not cover driven square-well row")
 
     l3_scan_case_files = [
         RUNNABLE_L3_CRITICAL / "environment" / "packet" / "cases.csv",
