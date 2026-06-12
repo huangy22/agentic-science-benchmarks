@@ -1,0 +1,10 @@
+id = "L3-pt-bbh-mode-counts"
+title = "PT-BBH Floquet invariant mode counts"
+level = "L3"
+paper_derived = true
+reference_case_ids = ["flq_l3_pt_bbh_indices_same_gap"]
+paper_ids = ["1121428643831087110"]
+hidden_gold_type = "integer_invariant_counting"
+original_check_required = true
+entrypoint = "python run_floquet.py --params packet/cases.csv --out out.csv"
+scorer = "python tests/score.py --pred out.csv --gold tests/gold/gold.csv"

@@ -16,6 +16,7 @@ RUNNABLE_L2_KICKED = ROOT / "L2-kicked-ssh-quasienergy"
 RUNNABLE_L2_SQUARE = ROOT / "L2-square-well-complex-quasienergies"
 RUNNABLE_L3_CRITICAL = ROOT / "L3-graphene-antidot-critical-amplitudes"
 RUNNABLE_L3_WINDOWS = ROOT / "L3-graphene-antidot-photon-windows"
+RUNNABLE_L3_PT_BBH = ROOT / "L3-pt-bbh-mode-counts"
 PROTOTYPE = ROOT / "L1-driven-qubit-effective-hamiltonian"
 
 REQUIRED_COLUMNS = [
@@ -203,6 +204,7 @@ def main() -> int:
         if manifest_levels[level] < 1:
             return fail(f"benchmark manifest lacks runnable paper-derived {level} task")
     manifest_papers: set[str] = set()
+    manifest_l3_papers: set[str] = set()
     manifest_refs: set[str] = set()
     for row in benchmark_manifest_rows:
         task_path = ROOT / row["task_path"]
@@ -254,6 +256,8 @@ def main() -> int:
                 if not paper_id.isdigit():
                     return fail(f"manifest paper id is not numeric: {paper_id!r}")
                 manifest_papers.add(paper_id)
+                if row["level"] == "L3" and row["status"] == "runnable":
+                    manifest_l3_papers.add(paper_id)
             if row["level"] == "L3" and row["original_check_required"] != "yes":
                 return fail(f"manifest L3 task must require original check: {row['task_id']}")
         else:
@@ -261,6 +265,8 @@ def main() -> int:
                 return fail(f"only the prototype may be non-paper-derived: {row['task_id']}")
     if len(manifest_papers) < 4:
         return fail("paper-derived runnable manifest must cover at least four papers")
+    if len(manifest_l3_papers) < 2:
+        return fail("runnable L3 manifest must cover at least two papers")
 
     for i, row in enumerate(rows, start=2):
         missing = [c for c in REQUIRED_COLUMNS if not row[c].strip()]
@@ -422,10 +428,45 @@ def main() -> int:
                     f"{case_file}: {ref_id!r} must use LKM papers/content/batch "
                     "for promoted L3 hidden gold unless explicitly downgraded"
                 )
+    l3_pt_bbh_case_files = [
+        RUNNABLE_L3_PT_BBH / "tests" / "hidden" / "cases.csv",
+    ]
+    for case_file in l3_pt_bbh_case_files:
+        for row in load_csv(case_file):
+            ref_id = row["reference_case_id"]
+            l3_runnable_refs.add(ref_id)
+            ref = accepted_by_case.get(ref_id)
+            if ref is None:
+                return fail(f"{case_file}: unknown accepted reference {ref_id!r}")
+            if ref["level"] != "L3":
+                return fail(f"{case_file}: {ref_id!r} is not an L3 reference")
+            if row["paper_id"] != ref["paper_id"]:
+                return fail(
+                    f"{case_file}: paper_id mismatch for {row['case_id']} "
+                    f"({row['paper_id']} != {ref['paper_id']})"
+                )
+            original_check = original_by_case.get(ref_id)
+            if original_check is None:
+                return fail(f"{case_file}: {ref_id!r} lacks original-paper check")
+            if ref_id not in original_terms_by_case:
+                return fail(f"{case_file}: {ref_id!r} lacks original-paper check terms")
+            if original_check["check_status"] != "confirmed":
+                return fail(
+                    f"{case_file}: {ref_id!r} original-paper check is not confirmed"
+                )
+            if original_check["paper_id"] != ref["paper_id"]:
+                return fail(f"{case_file}: original-check paper mismatch for {ref_id}")
+            if "papers/content/batch" not in original_check["original_source"]:
+                return fail(
+                    f"{case_file}: {ref_id!r} must use LKM papers/content/batch "
+                    "for promoted L3 hidden gold unless explicitly downgraded"
+                )
     if "flq_l3_graphene_antidot_critical_amplitudes" not in l3_runnable_refs:
         return fail("runnable L3 task does not cover graphene critical amplitudes row")
     if "flq_l3_graphene_antidot_photon_windows" not in l3_runnable_refs:
         return fail("runnable L3 task does not cover graphene photon windows row")
+    if "flq_l3_pt_bbh_indices_same_gap" not in l3_runnable_refs:
+        return fail("runnable L3 task does not cover PT-BBH same-gap row")
     required_manifest_refs = runnable_refs | l2_runnable_refs | l3_runnable_refs
     if not required_manifest_refs.issubset(manifest_refs):
         missing = sorted(required_manifest_refs - manifest_refs)
@@ -436,6 +477,7 @@ def main() -> int:
     print(f"manifest_papers={len(manifest_rows)}")
     print(f"runnable_paper_derived_tasks={len(paper_derived_tasks)}")
     print(f"runnable_paper_derived_papers={len(manifest_papers)}")
+    print(f"runnable_l3_papers={len(manifest_l3_papers)}")
     for level in ("L1", "L2", "L3"):
         print(f"accepted[{level}]={accepted_levels[level]}")
     return 0

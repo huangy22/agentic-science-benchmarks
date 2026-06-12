@@ -27,6 +27,7 @@ prototype and must not be counted toward paper-derived coverage.
   and L3.
 - The paper-derived runnable set must cover at least four distinct source
   papers.
+- Runnable L3 tasks must cover at least two distinct source papers.
 - The reference table must retain at least three accepted rows each for L1, L2,
   and L3, even if not all rows have been promoted to runnable tasks yet.
 - Rows marked `needs_original_paper` cannot enter hidden scoring.
@@ -52,6 +53,7 @@ bash benchmarks/floquet-effective-hamiltonian-benchmark/L2-kicked-ssh-quasienerg
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L2-square-well-complex-quasienergies/scripts/selfcheck.sh
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L3-graphene-antidot-critical-amplitudes/scripts/selfcheck.sh
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L3-graphene-antidot-photon-windows/scripts/selfcheck.sh
+bash benchmarks/floquet-effective-hamiltonian-benchmark/L3-pt-bbh-mode-counts/scripts/selfcheck.sh
 python benchmarks/floquet-effective-hamiltonian-benchmark/scripts/validate_reference.py
 ```
 

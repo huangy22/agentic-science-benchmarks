@@ -42,6 +42,8 @@ data-provenance pattern of `kunyuan/dfpt-lambda-benchmark`.
   checks.
 - `L3-graphene-antidot-photon-windows/`: a runnable L3 window-recovery task for
   the graphene antidot photon-energy validity ranges.
+- `L3-pt-bbh-mode-counts/`: a runnable L3 integer-invariant task for the
+  PT-symmetric extended BBH Floquet same-gap corner-state counts.
 - `L1-driven-qubit-effective-hamiltonian/`: retained only as a synthetic
   prototype for verifier mechanics. It is not the paper-derived benchmark.
 
@@ -91,6 +93,7 @@ bash benchmarks/floquet-effective-hamiltonian-benchmark/L2-kicked-ssh-quasienerg
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L2-square-well-complex-quasienergies/scripts/selfcheck.sh
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L3-graphene-antidot-critical-amplitudes/scripts/selfcheck.sh
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L3-graphene-antidot-photon-windows/scripts/selfcheck.sh
+bash benchmarks/floquet-effective-hamiltonian-benchmark/L3-pt-bbh-mode-counts/scripts/selfcheck.sh
 bash benchmarks/floquet-effective-hamiltonian-benchmark/L1-driven-qubit-effective-hamiltonian/scripts/selfcheck.sh
 python benchmarks/floquet-effective-hamiltonian-benchmark/scripts/validate_reference.py
 ```
