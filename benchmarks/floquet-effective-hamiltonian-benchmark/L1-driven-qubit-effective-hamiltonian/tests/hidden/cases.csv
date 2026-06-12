@@ -1,0 +1,6 @@
+case_id,bias,coupling,drive,omega,phase,n_periods,steps
+hid_near_resonance,1.2,0.07,0.55,1.25,0.2,11,2600
+hid_fast_drive,1.1,0.18,0.72,5.4,1.5,14,2000
+hid_large_phase,0.85,0.03,0.95,2.05,2.8,8,2800
+hid_low_gap,0.35,0.11,0.62,1.35,0.4,13,2600
+hid_detuned_high_bias,2.1,0.09,0.5,3.3,1.9,5,2200

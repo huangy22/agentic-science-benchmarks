@@ -1,0 +1,17 @@
+version = "1.0"
+
+[metadata]
+author_name = "Gaia workflow #1069 - L1 Floquet effective Hamiltonian"
+author_email = "noreply@example.com"
+difficulty_explanation = "Given parameters for a periodically driven two-level Hamiltonian, compute the one-period Floquet propagator, extract the branch-consistent effective Hamiltonian, report the quasienergy gap, and evaluate a multi-period transition probability. The formulas are not provided in the instructions; agents must implement a generic numerical Floquet solver and pass concealed cases with changed detunings, drive amplitudes, phases, and period counts."
+category = "scientific-computing"
+tags = ["physics", "floquet", "effective-hamiltonian", "quasienergy", "driven-qubit", "numerics", "python", "workflow-1069", "level-1"]
+
+[verifier]
+timeout_sec = 120.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 600.0

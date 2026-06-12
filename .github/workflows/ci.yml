@@ -1,0 +1,16 @@
+name: benchmark-selfcheck
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  floquet-l1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run Floquet L1 self-check
+        run: bash benchmarks/floquet-effective-hamiltonian-benchmark/L1-driven-qubit-effective-hamiltonian/scripts/selfcheck.sh

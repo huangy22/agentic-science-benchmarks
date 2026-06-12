@@ -1,0 +1,34 @@
+{
+  "name": "Floquet effective Hamiltonian derivation and analysis",
+  "cluster": 1069,
+  "size": 483,
+  "cohesion": 0.7406,
+  "n_papers": 191,
+  "priority": "P0",
+  "lab_type": "dry",
+  "verify_type": "numeric",
+  "definition": "This workflow family involves setting up a time-periodic Hamiltonian, applying Floquet theory (via exact diagonalization, high-frequency expansion, or degenerate perturbation theory) to derive an effective static Hamiltonian or quasienergy spectrum, and then using that to compute observables or dynamics of the driven system.",
+  "skeleton": [
+    {
+      "step_name": "Define time-periodic Hamiltonian",
+      "purpose": "Specify the system and driving parameters to obtain a time-periodic Hamiltonian H(t) with period T=2*pi/omega."
+    },
+    {
+      "step_name": "Choose Floquet approach",
+      "purpose": "Select the appropriate Floquet method based on driving frequency and amplitude regime."
+    },
+    {
+      "step_name": "Construct effective Floquet Hamiltonian or Floquet matrix",
+      "purpose": "Obtain a time-independent representation that generates stroboscopic dynamics."
+    },
+    {
+      "step_name": "Compute quasienergies and Floquet states",
+      "purpose": "Obtain the quasienergy spectrum and corresponding Floquet states."
+    },
+    {
+      "step_name": "Evaluate observables and dynamics",
+      "purpose": "Use Floquet states to compute time-averaged or stroboscopic quantities."
+    }
+  ],
+  "evaluation_protocol": "Validate against exact numerical Floquet evolution for small systems; compare stroboscopic dynamics, quasienergy spectra, and observables; check convergence with truncation or time-step parameters."
+}
