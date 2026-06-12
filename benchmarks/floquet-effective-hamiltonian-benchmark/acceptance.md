@@ -11,6 +11,9 @@ prototype and must not be counted toward paper-derived coverage.
   source excerpt, level, scoring tolerance, and verification mode.
 - Every runnable paper-derived task must list its reference rows and paper ids in
   `benchmark_manifest.csv`.
+- Every public packet and hidden case in a runnable paper-derived task must have
+  a `reference_case_id` that resolves to an accepted row in
+  `data/floquet_reference.csv`; the prototype is excluded from this rule.
 - Any hidden gold based on a paper figure, interval, scan, complex
   quasienergy, or experimental observable must have a `confirmed` row in
   `data/original_paper_checks.csv`.
@@ -28,6 +31,7 @@ prototype and must not be counted toward paper-derived coverage.
 - The paper-derived runnable set must cover at least four distinct source
   papers.
 - Runnable L3 tasks must cover at least two distinct source papers.
+- Every runnable paper-derived task must contain at least five hidden cases.
 - The reference table must retain at least three accepted rows each for L1, L2,
   and L3, even if not all rows have been promoted to runnable tasks yet.
 - Rows marked `needs_original_paper` cannot enter hidden scoring.
@@ -42,6 +46,12 @@ prototype and must not be counted toward paper-derived coverage.
   precision, experimental bandwidth, or exact integer invariant.
 - Hidden gold must be stored under `tests/gold` and not in public packet files,
   except for public development gold under `environment/packet/dev_gold.csv`.
+- `tests/test.sh` must follow the Harbor-style verifier contract: hide
+  `tests/hidden` and `tests/gold` from the agent when running as root, execute
+  agent code as `nobody` when possible, and write `/logs/verifier/reward.txt`
+  or the local verifier-log equivalent.
+- `scripts/selfcheck.sh` must run oracle PASS checks and a perturbed-output
+  negative check that must fail.
 
 ## Mechanical Gates
 

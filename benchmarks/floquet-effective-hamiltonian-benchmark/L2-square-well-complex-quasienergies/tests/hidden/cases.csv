@@ -1,2 +1,6 @@
 case_id,paper_id,reference_case_id,omega_over_V0,eps_a_real,eps_a_imag,eps_b_real,eps_b_imag
+hid_square_well_reported,812308293425823745,flq_l2_driven_square_well_quasienergies,0.62,0.251714,-0.004995,0.227343,-0.001456
 hid_square_well_reordered,812308293425823745,flq_l2_driven_square_well_quasienergies,0.62,0.227343,-0.001456,0.251714,-0.004995
+hid_square_well_a_less_stable,812308293425823745,flq_l2_driven_square_well_quasienergies,0.6200,0.2517140,-0.0049950,0.2273430,-0.0014560
+hid_square_well_b_less_stable,812308293425823745,flq_l2_driven_square_well_quasienergies,0.6200,0.2273430,-0.0014560,0.2517140,-0.0049950
+hid_square_well_precision_guard,812308293425823745,flq_l2_driven_square_well_quasienergies,0.62,0.251714000,-0.004995000,0.227343000,-0.001456000
